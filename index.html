@@ -1,0 +1,76 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <title>dartlang test</title>
+    <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="./css/client.css" />
+</head>
+<body>
+    <script type="application/dart"  src="./script/main.dart"></script>
+    <!--<script type="application/javascript"  src="./script/main.dart.js"></script>-->
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="brand" href="#">dartlang test</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container-fluid">
+        <div class="row-fluid" >
+            <div class="span4">
+                <textarea class="input-xxlarge" rows="23" id="remarkText">
+　　　　　　　　___|二ニｰ-､、;:;:;:;:;:;:;:;:;:;:;:;:;:;:;:;:;:;:|;::;:;:;:;:;:;:;:;:;:;:;:;:l
+　　　　　　　 /rヽ三三三三三─‐-- ､;:;:;:;:;:;:;:|;:;:;:;:;:;:;:;:;:;:;:;:;:;l
+　　　　　　　 ',i　,-三三三三三、 　 _,.ニ､ｰ-､!;: -‐二￣彡′
+　　　　　　　　',､、ヾ三三'"￣￣　　 `ー‐"　　　 ヾ-'" 　.〉′
+　　　　　　　　ヽ ヽヾ三,' 　　 :::..,. -‐- ､　　　　 _,,..-‐､、,'
+　　　　　　　　　｀ー',ミﾐ　 　 　::.弋ラ''ｰ､　　 i'"ｨ'之フ　l
+　　　　　　　　　／:l lﾐﾐ　　　　 ::::.. 二フ´　　 l　ヽ､.ノ　,' 　　　　
+　　　　　　,.-‐フ:::::| |,ミ　　　　　　　　　　　　 l　 　 　 / 　　　 　　
+　　　　 ／r‐'":::::::::| |ヾ　　　　　　　 ／__.　 　l　　　 /　　　　　　
+　_,. -‐"i .|::::::::::::::::::',.',. ＼　　　　　 　 ⌒ヽ､,ノ　　 /ヽ,＿　　　　　　　　　　　　　
+"　　　　l ヽ:::::::::::::::::ヽヽ.　＼　　　＿,＿,.､〃　　／l　|　　　　＿__,. -､
+　　　　 ',＼＼:::::::::::::::ヽ＼　 ＼　　､.￣⌒"￣／:::::|　|　　　 （ ヽ-ゝ _i,.＞-t--､
+　　　　　＼＼＼;::::::::::::＼＼　 ｀､.__ ￣´￣／::::::::::l　|　　　　｀''''フく　＿,. -ゝ┴-r-､
+　　　　　　 ヽ ＼｀ｰ-､::::::ヽ ヽ　　　￣フフ::::::::::::::ﾉ ./　　　,.-''"´ ／￣,.／´　ゝ＿'ヲ
+　　　　　　　　　 ｀ー-二'‐┴┴､＿_／‐'‐´二ｰ'".ノ 　　/　_,. く　 ／　ゝ_／￣|
+　　　　　　　　　　　　　　￣｀ー─--─‐''"￣　　　　　 /　にﾆ'／,.､-t‐┴―'''''ヽ
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　/　　/　　.（_ヽ-'__,.⊥--t-⊥,,_
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　/　 /　　／　 ￣　　 ）　　ﾉ__'-ﾉ
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　/　　　　　 /　　　 ゝﾆ--‐､‐　　　|
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　/ 　　　　　　　　　　/‐＜_　　 ヽ　　|ヽ </textarea>
+
+                <!-- setting panel -->
+                <div class="setting">
+                    <ul>
+                        <li>
+                            <label>Display speed</label>
+                            <input type="range"  min="0" max="99" value="50" step="1" id="displaySpeed">
+                        </li>
+                        <!--
+                        <li>
+                            <label>Display Direction</label>
+                            <ul>
+                                <li><input type="radio" name="flowDirection"  checked>Left to Right</li>
+                                <li><input type="radio" name="flowDirection"  >Right to Left</li>
+                                <li><input type="radio" name="flowDirection"  >Up to Down</li>
+                                <li><input type="radio" name="flowDirection"  >Down to Up</li>
+                            </ul>
+                        </li>
+                        -->
+                    </ul>
+                    <button class="btn-primary" id="postRemark" type="button">Post</button>
+                </div>
+            </div>
+
+            <div class="span8 offset4">
+                <div id="stage">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- workaround for SVG animation bug http://code.google.com/p/dart/issues/detail?id=2856 -->
+    <script>navigator.webkitStartDart()</script>
+</body>
+</html>
