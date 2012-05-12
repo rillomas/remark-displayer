@@ -4,24 +4,16 @@
   * Unit for animation
   */
 class Unit {
-    const Unit(int id) : _id = id;
+    const Unit(String id) : _id = id;
 
     String toString() {
-        switch (_id)
-        {
-        case PixelID:
-            return "px";
-        case MillisecID:
-            return "ms";
-        default:
-            return "px";
-        }
+        return _id;
     }
 
-    final int _id;
+    final String _id;
 
-    static final int PixelID = 0;
-    static final int MillisecID = 100;
+    static final String PixelID = "px";
+    static final String MillisecID = "ms";
     static final Pixel = const Unit(PixelID);
     static final Millisecond = const Unit(MillisecID);
 }

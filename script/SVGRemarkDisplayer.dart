@@ -51,12 +51,16 @@ class SVGRemarkDisplayer implements RemarkDisplayer {
         
         node.nodes.add(text);
         var duration = "${parameter.duration}${parameter.durationUnit.toString()}";
-        //SVGAnimateElement animation
-        //    = new SVGElement.svg("<animate attributeName='opacity' from='1' to='0' dur='1s' begin='indefinite' repeatCount='indefinite' />");
-        SVGAnimationElement animation
-            = new SVGElement.svg("<animateTransform attributeName='transform' type='translate' from='0' to='1300' dur='${duration}' fill='freeze' begin='indefinite' />");
-        node.nodes.add(animation);
-        animation.beginElement();
+        SVGAnimateElement fade
+            = new SVGElement.svg("<animate attributeName='opacity' from='1' to='0' dur='${duration}' begin='indefinite' fill='freeze' />");
+        //SVGAnimationElement animation
+        //     = new SVGElement.svg("<animateTransform attributeName='transform' type='translate' from='0' to='1300' dur='${duration}' fill='freeze' begin='indefinite' />");
+        SVGAnimationElement path
+             = new SVGElement.svg("<animateMotion path='M 50,100 Q40,75 90,70Q95,60 95,50Q180,40 170,100Z' dur='${duration}' fill='freeze' begin='indefinite' />");
+        node.nodes.add(path);
+        node.nodes.add(fade);
+        path.beginElement();
+        fade.beginElement();
 
         // proceed to next remark
         _currentRemark++;
