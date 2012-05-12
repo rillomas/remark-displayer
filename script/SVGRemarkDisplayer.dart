@@ -41,7 +41,7 @@ class SVGRemarkDisplayer implements RemarkDisplayer {
 
         // convert text to svg
         var lines = parameter.remark.split("\n");
-        SVGTextElement text = new SVGElement.svg("<text font-family='IPA モナーPゴシック' y='300'></text>");
+        SVGTextElement text = new SVGElement.svg("<text font-family='IPA モナーPゴシック' y='100'></text>");
         for (int i=0; i<lines.length; i++) {
             var line = lines[i];
             SVGTSpanElement span = new SVGElement.svg("<tspan x='0' dy='15'>${line}</tspan>");
@@ -56,7 +56,7 @@ class SVGRemarkDisplayer implements RemarkDisplayer {
         //SVGAnimationElement animation
         //     = new SVGElement.svg("<animateTransform attributeName='transform' type='translate' from='0' to='1300' dur='${duration}' fill='freeze' begin='indefinite' />");
         SVGAnimationElement path
-             = new SVGElement.svg("<animateMotion path='M 50,100 Q40,75 90,70Q95,60 95,50Q180,40 170,100Z' dur='${duration}' fill='freeze' begin='indefinite' />");
+             = new SVGElement.svg("<animateMotion path='${parameter.path}' dur='${duration}' fill='freeze' begin='indefinite' />");
         node.nodes.add(path);
         node.nodes.add(fade);
         path.beginElement();

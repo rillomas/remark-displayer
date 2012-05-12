@@ -1,17 +1,16 @@
 <!doctype html>
 <head>
     <meta charset="utf-8">
-    <title>dartlang test</title>
+    <title>Remark Presenter</title>
     <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="./css/client.css" />
 </head>
 <body>
     <script type="application/dart"  src="./script/main.dart"></script>
-    <!--<script type="application/javascript"  src="./script/main.dart.js"></script>-->
     <div class="navbar">
         <div class="navbar-inner">
             <div class="container">
-                <a class="brand" href="#">dartlang test</a>
+                <a class="brand" href="#">Remark Presenter</a>
             </div>
         </div>
     </div>
@@ -33,6 +32,10 @@
                         <li>
                             <label>Display speed</label>
                             <input type="range"  min="0" max="99" value="50" step="1" id="displaySpeed">
+                        </li>
+                        <li>
+                            <label>Path string</label>
+                             <textarea class="input-xxlarge" rows="5" id="pathString">M 50,100 Q40,75 90,70Q95,60 95,50Q180,40 170,100Z</textarea>
                         </li>
                         <!--
                         <li>
