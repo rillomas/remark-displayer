@@ -19,23 +19,30 @@
         <div class="row-fluid" >
             <div class="span4">
                 <div id="statusArea"></div>
-                <textarea class="input-xxlarge" rows="23" id="remarkText">
+                <!-- setting panel -->
+                <div class="setting">
+                    <ul>
+                        <li>
+                            <label>Remark</label>
+                            <textarea class="input-xxlarge" rows="23" id="remarkText">
 　　　　_,,,,._　　　　　 　 　 　 　 　 　 ､-r
 　 　,.','"￣｀,ゝ　_,,,_　　 _,,,_　　 _,,,,__,. | |　 _,,,,,_
 　　{ {　　 ,___　,'r⌒!ﾞ! ,'r⌒!ﾞ! ,.'r⌒!.!"| l ,.'r_,,.>〉
 　　ゝヽ､　~］|　ゞ_,.'ﾉ　ゞ_,.'ﾉ　ゞ__,.'ﾉ　| l {,ヽ､__,.
 　　　｀ｰ-‐'"　　 ~　　　 ~　　〃 ｀ﾞ,ヽ￣｀ ｀ﾞ'''"
 　　　　　　　　　　　　　　　　 ﾞ=､_,.〃 </textarea>
-                <!-- setting panel -->
-                <div class="setting">
-                    <ul>
+                        </li>
                         <li>
                             <label>Display speed</label>
                             <input type="range"  min="0" max="99" value="50" step="1" id="displaySpeed">
                         </li>
                         <li>
                             <label>Path string</label>
-                             <textarea class="input-xxlarge" rows="5" id="pathString">M 50,100 Q40,75 90,70Q95,60 95,50Q180,40 170,100Z</textarea>
+                             <textarea class="input-xxlarge" rows="5" id="pathString">M10,150 A15 15 180 0 1 70 140 A15 25 180 0 0 130 130 A15 55 180 0 1 190 120 A15 10 170 0 1 10 150</textarea>
+                        </li>
+                        <li>
+                            <label>Rotate</label>
+                             <input type="checkbox" id="rotateRemark">
                         </li>
                         <!--
                         <li>

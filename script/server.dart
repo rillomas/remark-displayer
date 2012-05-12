@@ -15,15 +15,6 @@ void main() {
             // broadcast
             print("[client] $message");
             connectionList.forEach((c) => c.send(message));
-            /*
-            if (message == "bye") {
-                connection.close(0, "bye command.");
-                print("connection closed.");
-            } else {
-                print("[client] $message");
-                connection.send(message);
-            }
-            */
         };
         
         connection.onClosed = (int status, String reason) {

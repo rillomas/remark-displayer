@@ -55,8 +55,12 @@ class SVGRemarkDisplayer implements RemarkDisplayer {
             = new SVGElement.svg("<animate attributeName='opacity' from='1' to='0' dur='${duration}' begin='indefinite' fill='freeze' />");
         //SVGAnimationElement animation
         //     = new SVGElement.svg("<animateTransform attributeName='transform' type='translate' from='0' to='1300' dur='${duration}' fill='freeze' begin='indefinite' />");
-        SVGAnimationElement path
-             = new SVGElement.svg("<animateMotion path='${parameter.path}' dur='${duration}' fill='freeze' begin='indefinite' />");
+        SVGAnimationElement path = null;
+        if (parameter.rotate) {
+            path = new SVGElement.svg("<animateMotion path='${parameter.path}' dur='${duration}' fill='freeze' begin='indefinite' rotate='auto' />");
+        } else {
+            path = new SVGElement.svg("<animateMotion path='${parameter.path}' dur='${duration}' fill='freeze' begin='indefinite' />");
+        }
         node.nodes.add(path);
         node.nodes.add(fade);
         path.beginElement();
