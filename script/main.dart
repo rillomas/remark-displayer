@@ -5,12 +5,13 @@
 #import("Unit.dart");
 
 void main() {
+    // initialize displayers
     final int MAX_NUMBER_OF_REMARKS = 10;
     final int MAX_SPEED = 100;
-
     var displayer = new SVGRemarkDisplayer();
     displayer.initialize("#stage", MAX_NUMBER_OF_REMARKS);
 
+    // create websocket and add handlers
     WebSocket webSocket = new WebSocket("ws://127.0.0.1:8080");
     Element status = document.query("#statusArea");
     InputElement speed = document.query("#displaySpeed");
@@ -28,9 +29,9 @@ void main() {
             displayer.display(param);
         });
 
+    // connect post button with websocket
     TextAreaElement textNode = document.query("#remarkText");
     Element postButton = document.query("#postRemark");
-
     postButton.on.click.add((Event e) {
         String message = textNode.value;
         if (!message.isEmpty()) {
