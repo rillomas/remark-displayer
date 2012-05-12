@@ -14,7 +14,7 @@ void main() {
                 print("connection closed.");
             } else {
                 print("[client] $message");
-                connection.send("[server] $message");
+                connection.send(message);
             }
         };
         

@@ -1,6 +1,5 @@
 #library("RemarkDisplayer");
 #import("dart:html");
-#import("ElementAnimator.dart");
 #import("Unit.dart");
 
 /**
