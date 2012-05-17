@@ -13,7 +13,7 @@ void main() {
     displayer.initialize("#stage", MAX_NUMBER_OF_REMARKS);
 
     // create websocket and add handlers
-    WebSocket webSocket = new WebSocket("ws://127.0.0.1:8080");
+    WebSocket webSocket = new WebSocket("ws://127.0.0.1:8080/echo");
     Element status = document.query("#statusArea");
     webSocket.on.open.add((event) {
             //status.innerHTML = "<p>opened</p>";
