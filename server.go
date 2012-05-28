@@ -40,7 +40,7 @@ type DisplayParameter struct {
 type Request interface {
 	Type() RequestType
 	ClientID() int
-	Process(clientList []*websocket.Conn, queue chan Response, currentClientID *int) []*websocket.Conn
+	Process(clientList map[int]*websocket.Conn, queue chan Response, currentClientID *int) map[int]*websocket.Conn
 }
 
 type GenerateClientIDRequest struct {
@@ -80,7 +80,7 @@ func (gcm GenerateClientIDRequest) Type() RequestType {
 	return GENERATE_CLIENT_ID
 }
 
-func (gcm GenerateClientIDRequest) Process(clientList []*websocket.Conn, queue chan Response, currentClientID *int) []*websocket.Conn {
+func (gcm GenerateClientIDRequest) Process(clientList map[int]*websocket.Conn, queue chan Response, currentClientID *int) map[int]*websocket.Conn {
 	res := GenerateClientIDResponse {
 		*currentClientID,
 	}
@@ -100,8 +100,10 @@ func (acm AddClientRequest) Type() RequestType {
 	return ADD_CLIENT
 }
 
-func (acm AddClientRequest) Process(clientList []*websocket.Conn, queue chan Response, currentClientID *int) []*websocket.Conn {
-	return append(clientList, acm.Connection)
+func (acm AddClientRequest) Process(clientList map[int]*websocket.Conn, queue chan Response, currentClientID *int) map[int]*websocket.Conn {
+	clientList[acm.clientID] = acm.Connection
+	fmt.Printf("Added client. %d clients existing.\n", len(clientList))
+	return clientList
 }
 
 func (bm BroadcastRequest) ClientID() int {
@@ -112,14 +114,15 @@ func (bm BroadcastRequest) Type() RequestType {
 	return BROADCAST
 }
 
-func (bm BroadcastRequest) Process(clientList []*websocket.Conn, queue chan Response, currentClientID *int) []*websocket.Conn  {
+func (bm BroadcastRequest) Process(clientList map[int]*websocket.Conn, queue chan Response, currentClientID *int) map[int]*websocket.Conn  {
 	// send a text message serialized as JSON.
-	for _, client := range clientList {
-		fmt.Println("Sending")
+	for id, client  := range clientList {
+		fmt.Printf("Sending to %d\n", id)
 		err := websocket.JSON.Send(client, bm.DisplayParameter)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Printf("error: %s\n",err)
 			// remove client
+			delete(clientList, id)
 		}
 	}
 	fmt.Println("Broadcasted")
@@ -134,14 +137,19 @@ func (rcm RemoveClientRequest) Type() RequestType {
 	return REMOVE_CLIENT
 }
 
-func (rcm RemoveClientRequest) Process(clientList []*websocket.Conn, queue chan Response, currentClientID *int) []*websocket.Conn  {
+func (rcm RemoveClientRequest) Process(clientList map[int]*websocket.Conn, queue chan Response, currentClientID *int) map[int]*websocket.Conn  {
 	// remove client
+	delete(clientList, rcm.clientID)
+	fmt.Printf("Removed client ID:%d. %d left\n", rcm.clientID, len(clientList))
 	return clientList
 }
 
+/**
+  * Message loop for the client manager
+  */
 func manageClient(reqQueue chan Request, resQueue chan Response) {
 	var currentClientID int = 0
-	clientList := make([]*websocket.Conn, 0)
+	clientList := make(map[int]*websocket.Conn, 0)
 	fmt.Println("Entering client manage loop")
 	for {
 		select {
@@ -152,6 +160,9 @@ func manageClient(reqQueue chan Request, resQueue chan Response) {
 	}
 }
 
+/**
+  * Get a new client ID from the client manager
+  */
 func generateClientID(reqQueue chan Request, resQueue chan Response)  int {
 	msg := GenerateClientIDRequest {}
 	reqQueue <- msg
@@ -160,6 +171,9 @@ func generateClientID(reqQueue chan Request, resQueue chan Response)  int {
 	return v.ClientID
 }
 
+/**
+  * Function that serves each client
+  */
 func serveClient(ws *websocket.Conn, reqQueue chan Request, resQueue chan Response) {
 	id := generateClientID(reqQueue, resQueue)
 	defer func() {
@@ -180,10 +194,8 @@ func serveClient(ws *websocket.Conn, reqQueue chan Request, resQueue chan Respon
 			ws,
 		},
 	}
-	fmt.Println("Adding client")
 	reqQueue <- msg
 	fmt.Println("Entering receive loop")
-
 	for {
 		var param DisplayParameter
 		err := websocket.JSON.Receive(ws, &param)
@@ -205,11 +217,17 @@ func serveClient(ws *websocket.Conn, reqQueue chan Request, resQueue chan Respon
 	}
 }
 
+/**
+  * Handler for the websocket json server
+  */
 func echoJsonServer(ws *websocket.Conn) {
 	fmt.Printf("jsonServer %#v\n", ws.Config())
 	serveClient(ws, requestQueue, responseQueue)
 }
 
+/**
+  * Serve all files (html, dart, css)
+  */
 func mainServer(w http.ResponseWriter, req *http.Request) {
 	path := req.URL.Path[1:]
 	fmt.Printf("path: %s\n",path)
@@ -217,7 +235,10 @@ func mainServer(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+	// start an actor that processes requests from every client
 	go manageClient(requestQueue, responseQueue)
+
+	// setup the handlers
 	http.Handle("/echo", websocket.Handler(echoJsonServer))
 	http.HandleFunc("/", mainServer)
 	fmt.Println("serving...")
