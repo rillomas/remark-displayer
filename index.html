@@ -12,21 +12,20 @@
         <div class="navbar-inner">
             <div class="container">
                 <a class="brand" href="#">Remark Presenter</a>
+                <button class="btn-primary" id="hideStatus">Collapse</button>
             </div>
         </div>
     </div>
     
     <div class="container-fluid">
         <div class="row-fluid" >
-            <div class="span4">
-                <div id="statusArea"></div>
-                <!-- setting panel -->
-                <div class="setting">
+            <div class="span6" id="settingArea" >
+                <div>
                     <ul>
                         <li>
                             <label>Remark</label>
                             <textarea class="input-xxlarge" rows="23" id="remarkText">
-　　　　_,,,,._　　　　　 　 　 　 　 　 　 ､-r
+                                　　　　_,,,,._　　　　　 　 　 　 　 　 　 ､-r
 　 　,.','"￣｀,ゝ　_,,,_　　 _,,,_　　 _,,,,__,. | |　 _,,,,,_
 　　{ {　　 ,___　,'r⌒!ﾞ! ,'r⌒!ﾞ! ,.'r⌒!.!"| l ,.'r_,,.>〉
 　　ゝヽ､　~］|　ゞ_,.'ﾉ　ゞ_,.'ﾉ　ゞ__,.'ﾉ　| l {,ヽ､__,.
@@ -39,29 +38,29 @@
                         </li>
                         <li>
                             <label>Path string</label>
-                             <textarea class="input-xxlarge" rows="5" id="pathString">M10,150 A15 15 180 0 1 70 140 A15 25 180 0 0 130 130 A15 55 180 0 1 190 120 A15 10 170 0 1 10 150</textarea>
+                            <textarea class="input-xxlarge" rows="5" id="pathString">M10,150 A15 15 180 0 1 70 140 A15 25 180 0 0 130 130 A15 55 180 0 1 190 120 A15 10 170 0 1 10 150</textarea>
                         </li>
                         <li>
                             <label>Rotate</label>
-                             <input type="checkbox" id="rotateRemark">
+                            <input type="checkbox" id="rotateRemark">
                         </li>
                         <!--
-                        <li>
-                            <label>Display Direction</label>
-                            <ul>
-                                <li><input type="radio" name="flowDirection"  checked>Left to Right</li>
-                                <li><input type="radio" name="flowDirection"  >Right to Left</li>
-                                <li><input type="radio" name="flowDirection"  >Up to Down</li>
-                                <li><input type="radio" name="flowDirection"  >Down to Up</li>
-                            </ul>
-                        </li>
-                        -->
+                            <li>
+                                <label>Display Direction</label>
+                                <ul>
+                                    <li><input type="radio" name="flowDirection"  checked>Left to Right</li>
+                                    <li><input type="radio" name="flowDirection"  >Right to Left</li>
+                                    <li><input type="radio" name="flowDirection"  >Up to Down</li>
+                                    <li><input type="radio" name="flowDirection"  >Down to Up</li>
+                                </ul>
+                            </li>
+                            -->
                     </ul>
                     <button class="btn-primary" id="postRemark" type="button">Post</button>
                 </div>
             </div>
-
-            <div class="span8 offset4">
+            
+            <div class="span6 offset6" id="displayArea">
                 <div id="stage">
                 </div>
             </div>

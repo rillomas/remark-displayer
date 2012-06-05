@@ -3,11 +3,21 @@
 #import("RemarkDisplayer.dart");
 
 /**
+  * Class representing a remark
+  */
+class Remark {
+    Remark(this.node, this.parameter, this.isSelected);
+    SVGElement node;
+    DisplayParameter parameter;
+    bool isSelected;
+}
+
+/**
  * Class that displays remarks via SVG
  */
 class SVGRemarkDisplayer implements RemarkDisplayer {
     SVGRemarkDisplayer() {
-        _remarkList = new List<SVGElement>();
+        _remarkList = new List<Remark>();
         _currentRemark = 0;
         _numberOfRemarks = 0;
     }
@@ -17,27 +27,17 @@ class SVGRemarkDisplayer implements RemarkDisplayer {
      */
     void initialize(String stageID, int numberOfRemarks) {
         _numberOfRemarks = numberOfRemarks;
-        var stage = document.query(stageID);
-
-        var svg = new SVGSVGElement();
-        for (int i=0; i<numberOfRemarks; i++) {
-            SVGGElement g = new SVGElement.svg("<g></g>");
-            _remarkList.add(g);
-            svg.nodes.add(g);
-        }
-
-       stage.nodes.add(svg);
-       _root = svg;
+        _setupStage(stageID, numberOfRemarks);
     }
 
     /**
      * Display given remark at the current node
      */
     void display(DisplayParameter parameter) {
-        var node = _remarkList[_currentRemark];
+        var remark = _remarkList[_currentRemark];
 
         // delete any nodes we already have
-        node.nodes.clear();
+        remark.node.nodes.clear();
 
         // convert text to svg
         var lines = parameter.remark.split("\n");
@@ -49,7 +49,7 @@ class SVGRemarkDisplayer implements RemarkDisplayer {
             //list.add(span);
         }
         
-        node.nodes.add(text);
+        remark.node.nodes.add(text);
         var duration = "${parameter.duration}${parameter.durationUnit.toString()}";
         SVGAnimateElement fade
             = new SVGElement.svg("<animate attributeName='opacity' from='1' to='0' dur='${duration}' begin='indefinite' fill='freeze' />");
@@ -61,8 +61,33 @@ class SVGRemarkDisplayer implements RemarkDisplayer {
         } else {
             path = new SVGElement.svg("<animateMotion path='${parameter.path}' dur='${duration}' fill='freeze' begin='indefinite' />");
         }
-        node.nodes.add(path);
-        node.nodes.add(fade);
+        remark.node.nodes.add(path);
+        remark.node.nodes.add(fade);
+        
+        remark.node.on.mouseDown.add((MouseEvent e) {
+                if (e.target is SVGElement) {
+                    SVGElement elem = e.target;
+                    print("left: ${elem.style.left} right: ${elem.style.top}");
+                    print("mouse down!! x:${e.clientX} y:${e.clientY}");
+                }
+                print(e.srcElement);
+                print(e.target);
+                path.endElement();
+                fade.endElement();
+        });
+        
+        remark.node.on.dragStart.add((Event e) {
+                print("drag start");
+        });
+
+        remark.node.on.mouseMove.add((MouseEvent e) {
+                //print(e.button);
+                //print(e.button);
+                //if (e.button == 0) {
+                // print("mouse drag!");
+                //}
+        });
+        
         path.beginElement();
         fade.beginElement();
 
@@ -73,8 +98,25 @@ class SVGRemarkDisplayer implements RemarkDisplayer {
         }
     }
 
+    /**
+      * Setup the stage for remarks
+      */
+    void _setupStage(String stageID, int numberOfRemarks) {
+        var stage = document.query(stageID);
+
+        var svg = new SVGSVGElement();
+        for (int i=0; i<numberOfRemarks; i++) {
+            SVGGElement g = new SVGElement.svg("<g draggable='true'></g>");
+            svg.nodes.add(g);
+
+            var r = new Remark(g, null, false);
+            _remarkList.add(r);
+        }
+
+        stage.nodes.add(svg);
+    }
+
     int _numberOfRemarks;
-    List<SVGElement> _remarkList;
+    List<Remark> _remarkList;
     int _currentRemark;
-    SVGSVGElement _root;
 }
