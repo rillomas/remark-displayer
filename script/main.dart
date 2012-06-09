@@ -6,22 +6,83 @@
 #import("Unit.dart");
 
 
-class App {
+class PanelLayoutParameter {
+    PanelLayoutParameter(this.inputPanelID, this.displayAreaID, this.remarkPanelID, this.hideInputPanelID, this.hideRemarkPanelID);
+    String inputPanelID;
+    String displayAreaID;
+    String remarkPanelID;
+    String hideInputPanelID;
+    String hideRemarkPanelID;
+}
 
-    App() {
-        _settingAreaVisible = true;
+/**
+  * Manages Panel Layout
+  */
+class PanelLayout {
+    PanelLayout() {
+        _inputPanelVisible = true;
+        _remarkPanelVisible = true;
     }
 
-    void initialize(RemarkDisplayer displayer) {
+    /**
+      * Setup the side bar for setting
+      */
+    void initialize(PanelLayoutParameter param) {
+        _inputPanel = document.query(param.inputPanelID);
+        _displayArea = document.query(param.displayAreaID);
+        _remarkPanel = document.query(param.remarkPanelID);
+        _hideInputBtn = document.query(param.hideInputPanelID);       
+        _hideInputBtn.on.click.add(_onPanelVisibilityChange);
+    }
+
+    /**
+      * Change the panel layout
+      */
+    void _onPanelVisibilityChange(Event e) {
+        // switch visibility of the setting area
+        _inputPanelVisible = !_inputPanelVisible;
+        if (_inputPanelVisible) {
+            int displayAreaWidth = FULL_WIDTH - INPUT_PANEL_WIDTH;
+
+            // expand setting area
+            _inputPanel.style.visibility = "visible";
+            _inputPanel.style.width = "";
+            _inputPanel.classes = ["span${INPUT_PANEL_WIDTH}"];
+            _displayArea.classes = ["offset${INPUT_PANEL_WIDTH}", "span${displayAreaWidth}"];
+            _hideInputBtn.text = "Hide Input Panel";
+        } else {
+            int displayAreaWidth = FULL_WIDTH;
+
+            // hide setting area and expand display area
+            _inputPanel.style.visibility = "collapse";
+            _inputPanel.classes = ["span"];
+            _inputPanel.style.width = "0px";
+            _displayArea.classes = ["span${displayAreaWidth}"];
+            _hideInputBtn.text = "Show Input Panel";
+        }
+    }
+
+    final int FULL_WIDTH = 12;
+    final int INPUT_PANEL_WIDTH = 6;
+    final int REMARK_PANEL_WIDTH = 2;
+    bool _inputPanelVisible;
+    bool _remarkPanelVisible;
+
+    Element _inputPanel;
+    Element _displayArea;
+    Element _remarkPanel;
+    Element _hideInputBtn;
+}
+
+class App {
+    App() {
+        _layout = new PanelLayout();
+    }
+
+    void initialize(RemarkDisplayer displayer, PanelLayoutParameter layoutParam) {
         // create websocket and add handlers
         WebSocket webSocket = new WebSocket("ws://localhost:8080/echo");
         Element status = document.query("#statusArea");
-        webSocket.on.open.add((event) {
-                //status.innerHTML = "<p>opened</p>";
-            });
-        webSocket.on.close.add((event) {
-                //status.innerHTML = "<p>closed</p>";
-            });
         webSocket.on.message.add((event) {
                 // display remark with given parameters
                 var message = event.data;
@@ -47,38 +108,13 @@ class App {
                 String paramJson = JSON.stringify(param.toMap());
                 webSocket.send(paramJson);
             });
-        _setupSettingArea("#settingArea", "#displayArea");
+
+        _layout.initialize(layoutParam);
     }
-
-
-    /**
-      * Setup the side bar for setting
-      */
-    void _setupSettingArea(String settingAreaID, String displayAreaID) {
-        Element settingArea = document.query(settingAreaID);
-        Element displayArea = document.query(displayAreaID);
-        Element btn = document.query("#hideStatus");
-        
-        btn.on.click.add((Event e) {
-                _settingAreaVisible = !_settingAreaVisible;
-                if (_settingAreaVisible) {
-                    settingArea.style.visibility = "visible";
-                    settingArea.style.width = "";
-                    settingArea.classes = ["span6"];
-                    displayArea.classes = ["offset6", "span6"];
-                } else {
-                    settingArea.style.visibility = "collapse";
-                    settingArea.classes = ["span"];
-                    settingArea.style.width = "0px";
-                    displayArea.classes = ["span12"];
-                }
-            });
-    }
-
 
     final int MAX_SPEED = 100;
-    bool _settingAreaVisible;
     RemarkDisplayer _displayer;
+    PanelLayout _layout;
 }
 
 void main() {
@@ -86,6 +122,8 @@ void main() {
         final int MAX_NUMBER_OF_REMARKS = 15;
         var displayer = new SVGRemarkDisplayer();
         displayer.initialize("#stage", MAX_NUMBER_OF_REMARKS);
+
+        PanelLayoutParameter param = new PanelLayoutParameter("#inputPanel", "#displayArea", "#remarkPanel", "#hideInputPanel", "#hideRemarkPanel");
         App app = new App();
-        app.initialize(displayer);
+        app.initialize(displayer, param);
 }
