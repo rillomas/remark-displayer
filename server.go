@@ -4,6 +4,7 @@ import (
 	"code.google.com/p/go.net/websocket"
 	"net/http"
 	"fmt"
+	"os"
 )
 
 type RequestType int
@@ -242,8 +243,11 @@ func main() {
 	http.Handle("/echo", websocket.Handler(echoJsonServer))
 	http.HandleFunc("/", mainServer)
 	fmt.Println("serving...")
-	port := 5000 
-	err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "5000"
+	}
+	err := http.ListenAndServe(fmt.Sprintf(":%s", port), nil)
 	if err != nil {
 		panic("ListenAndServer: " + err.Error())
 	}
