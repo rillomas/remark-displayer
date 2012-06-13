@@ -81,7 +81,7 @@ class App {
 
     void initialize(RemarkDisplayer displayer, PanelLayoutParameter layoutParam) {
         // create websocket and add handlers
-        WebSocket webSocket = new WebSocket("ws://localhost:8080/echo");
+        WebSocket webSocket = new WebSocket("ws://xclamm.herokuapp.com:5000/echo");
         Element status = document.query("#statusArea");
         webSocket.on.message.add((event) {
                 // display remark with given parameters

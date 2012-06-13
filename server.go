@@ -242,7 +242,7 @@ func main() {
 	http.Handle("/echo", websocket.Handler(echoJsonServer))
 	http.HandleFunc("/", mainServer)
 	fmt.Println("serving...")
-	port := 8080
+	port := 5000 
 	err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 	if err != nil {
 		panic("ListenAndServer: " + err.Error())
